@@ -5,9 +5,11 @@ using WebApplication1.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add MVC services
+// Добавяне на MVC услуги
 builder.Services.AddControllersWithViews();
 
 // Configure database with connection string
+// Конфигуриране на базата данни с низ за връзка
 var connectionString = builder.Configuration.GetConnectionString("GardenDbConnection") 
     ?? "Data Source=CommunityGarden.db";
 
