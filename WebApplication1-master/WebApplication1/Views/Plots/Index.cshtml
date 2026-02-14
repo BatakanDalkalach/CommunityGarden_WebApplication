@@ -1,0 +1,134 @@
+@model IEnumerable<WebApplication1.Models.GardenPlot>
+@{
+    ViewData["Title"] = "Garden Plots Gallery";
+    var freeCount = Model.Where(x => !x.IsOccupied).Count();
+    var takenCount = Model.Count() - freeCount;
+}
+
+<article class="cgms-plots-wrapper">
+    <style>
+        .cgms-plots-wrapper { --primary-hue: 200; --accent-hue: 280; background: hsl(var(--primary-hue), 25%, 95%); padding: 3rem 1rem; min-height: 100vh; }
+        .cgms-masthead { background: linear-gradient(120deg, hsl(var(--primary-hue), 70%, 55%), hsl(var(--accent-hue), 60%, 50%)); padding: 2.5rem; border-radius: 1rem; color: white; margin-bottom: 2rem; }
+        .cgms-masthead-title { font-size: 2.8rem; font-weight: 900; margin: 0 0 0.5rem 0; }
+        .cgms-summary-bar { background: white; padding: 1.8rem; border-radius: 0.8rem; margin-bottom: 2rem; box-shadow: 0 3px 12px rgba(0,0,0,0.08); }
+        .cgms-metrics { display: flex; gap: 2.5rem; align-items: center; }
+        .cgms-metric-item { display: flex; align-items: baseline; gap: 0.5rem; }
+        .cgms-metric-num { font-size: 2rem; font-weight: 800; color: hsl(var(--primary-hue), 70%, 50%); }
+        .cgms-metric-txt { color: #6c757d; font-size: 1.1rem; }
+        .cgms-plots-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.8rem; }
+        .cgms-plot-tile { background: white; border-radius: 0.9rem; overflow: hidden; box-shadow: 0 4px 14px rgba(0,0,0,0.09); }
+        .cgms-plot-tile:hover { transform: translateY(-6px); transition: transform 0.25s ease; box-shadow: 0 8px 24px rgba(0,0,0,0.14); }
+        .cgms-tile-header { padding: 1.8rem; color: white; position: relative; }
+        .cgms-tile-header.free { background: linear-gradient(135deg, #10b981, #059669); }
+        .cgms-tile-header.taken { background: linear-gradient(135deg, #f59e0b, #d97706); }
+        .cgms-status-pill { position: absolute; top: 0.9rem; right: 0.9rem; background: rgba(255,255,255,0.28); padding: 0.4rem 1rem; border-radius: 1.5rem; font-size: 0.85rem; font-weight: 700; }
+        .cgms-code-display { font-size: 2.5rem; font-weight: 900; margin-top: 1.5rem; }
+        .cgms-tile-content { padding: 1.8rem; }
+        .cgms-spec-table { width: 100%; border-collapse: collapse; margin-bottom: 1.2rem; }
+        .cgms-spec-row { border-bottom: 1px solid #e5e7eb; }
+        .cgms-spec-row:last-child { border-bottom: none; }
+        .cgms-spec-label { padding: 0.7rem 0; color: #6b7280; font-weight: 600; }
+        .cgms-spec-value { padding: 0.7rem 0; text-align: right; font-weight: 700; color: #1f2937; }
+        .cgms-tenant-notice { background: #dbeafe; padding: 0.9rem; border-radius: 0.5rem; margin-bottom: 1.2rem; font-size: 0.95rem; }
+        .cgms-actions-row { display: flex; gap: 0.7rem; }
+        .cgms-action-link { flex: 1; padding: 0.8rem; text-align: center; border-radius: 0.6rem; text-decoration: none; font-weight: 700; font-size: 0.95rem; }
+        .cgms-action-view { background: #dbeafe; color: #1e40af; }
+        .cgms-action-view:hover { background: #1e40af; color: white; }
+        .cgms-action-modify { background: #fed7aa; color: #92400e; }
+        .cgms-action-modify:hover { background: #92400e; color: white; }
+        .cgms-add-button { background: #10b981; color: white; padding: 0.9rem 2.2rem; border-radius: 0.7rem; text-decoration: none; font-weight: 700; }
+        .cgms-add-button:hover { background: #059669; color: white; }
+        .cgms-empty-state { background: white; padding: 4rem 2rem; border-radius: 1rem; text-align: center; }
+    </style>
+
+    <div class="container">
+        <header class="cgms-masthead">
+            <h1 class="cgms-masthead-title">🌿 Garden Plots Management</h1>
+            <p style="margin: 0; opacity: 0.92;">Browse and administer all garden plot records</p>
+        </header>
+
+        @if (TempData["SuccessMsg"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show">
+                <strong>✓</strong> @TempData["SuccessMsg"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
+
+        <section class="cgms-summary-bar">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem;">
+                <div class="cgms-metrics">
+                    <div class="cgms-metric-item">
+                        <span class="cgms-metric-num">@Model.Count()</span>
+                        <span class="cgms-metric-txt">Total</span>
+                    </div>
+                    <div class="cgms-metric-item">
+                        <span class="cgms-metric-num">@freeCount</span>
+                        <span class="cgms-metric-txt">Free</span>
+                    </div>
+                    <div class="cgms-metric-item">
+                        <span class="cgms-metric-num">@takenCount</span>
+                        <span class="cgms-metric-txt">Occupied</span>
+                    </div>
+                </div>
+                <a asp-action="AddNew" class="cgms-add-button">+ New Plot</a>
+            </div>
+        </section>
+
+        @if (!Model.Any())
+        {
+            <section class="cgms-empty-state">
+                <h3>No garden plots exist</h3>
+                <p>Start by creating your first plot</p>
+                <a asp-action="AddNew" class="btn btn-primary mt-3">Create First Plot</a>
+            </section>
+        }
+        else
+        {
+            <section class="cgms-plots-grid">
+                @foreach (var plotItem in Model.OrderBy(p => p.PlotDesignation))
+                {
+                    <article class="cgms-plot-tile">
+                        <header class="cgms-tile-header @(plotItem.IsOccupied ? "taken" : "free")">
+                            <div class="cgms-status-pill">@(plotItem.IsOccupied ? "Occupied" : "Free")</div>
+                            <div class="cgms-code-display">@plotItem.PlotDesignation</div>
+                        </header>
+                        
+                        <div class="cgms-tile-content">
+                            <table class="cgms-spec-table">
+                                <tr class="cgms-spec-row">
+                                    <td class="cgms-spec-label">Area:</td>
+                                    <td class="cgms-spec-value">@plotItem.SquareMeters m²</td>
+                                </tr>
+                                <tr class="cgms-spec-row">
+                                    <td class="cgms-spec-label">Soil:</td>
+                                    <td class="cgms-spec-value">@plotItem.SoilType</td>
+                                </tr>
+                                <tr class="cgms-spec-row">
+                                    <td class="cgms-spec-label">Fee:</td>
+                                    <td class="cgms-spec-value">@plotItem.YearlyRentalFee.ToString("C")</td>
+                                </tr>
+                                <tr class="cgms-spec-row">
+                                    <td class="cgms-spec-label">Water:</td>
+                                    <td class="cgms-spec-value">@(plotItem.WaterAccessAvailable ? "Yes" : "No")</td>
+                                </tr>
+                            </table>
+                            
+                            @if (plotItem.CurrentTenant != null)
+                            {
+                                <div class="cgms-tenant-notice">
+                                    <strong>Tenant:</strong> @plotItem.CurrentTenant.FullLegalName
+                                </div>
+                            }
+                            
+                            <div class="cgms-actions-row">
+                                <a asp-action="ViewDetails" asp-route-id="@plotItem.PlotIdentifier" class="cgms-action-link cgms-action-view">View</a>
+                                <a asp-action="Modify" asp-route-id="@plotItem.PlotIdentifier" class="cgms-action-link cgms-action-modify">Edit</a>
+                            </div>
+                        </div>
+                    </article>
+                }
+            </section>
+        }
+    </div>
+</article>

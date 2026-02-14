@@ -1,0 +1,140 @@
+@model WebApplication1.Models.GardenPlot
+@{
+    ViewData["Title"] = "Plot Details";
+    var statusHue = Model.IsOccupied ? "25" : "142";
+}
+
+<article class="cgms-detail-container">
+    <style>
+        .cgms-detail-container { --status-hue: @statusHue; background: #f3f4f6; padding: 2.5rem 1rem; min-height: 100vh; }
+        .cgms-detail-card { max-width: 920px; margin: 0 auto; background: white; border-radius: 1.2rem; overflow: hidden; box-shadow: 0 6px 24px rgba(0,0,0,0.12); }
+        .cgms-detail-masthead { background: hsl(var(--status-hue), 65%, 52%); padding: 3rem; color: white; }
+        .cgms-detail-code { font-size: 4rem; font-weight: 900; margin: 0 0 0.8rem 0; }
+        .cgms-detail-badge { display: inline-block; background: rgba(255,255,255,0.25); padding: 0.7rem 1.8rem; border-radius: 2rem; font-weight: 700; }
+        .cgms-detail-body { padding: 2.8rem; }
+        .cgms-metric-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.8rem; margin-bottom: 2.5rem; }
+        .cgms-metric-card { background: linear-gradient(135deg, #8b5cf6, #6d28d9); padding: 2.2rem; border-radius: 1rem; text-align: center; color: white; }
+        .cgms-metric-card:nth-child(2) { background: linear-gradient(135deg, #ec4899, #be185d); }
+        .cgms-metric-num { font-size: 3.2rem; font-weight: 900; margin: 0; }
+        .cgms-metric-label { opacity: 0.9; margin-top: 0.6rem; font-size: 1.05rem; }
+        .cgms-feature-chips { display: flex; gap: 1.2rem; margin-bottom: 2.5rem; flex-wrap: wrap; }
+        .cgms-chip { padding: 0.9rem 1.8rem; border-radius: 0.8rem; font-weight: 700; }
+        .cgms-chip-water { background: #d1fae5; color: #065f46; }
+        .cgms-chip-nowater { background: #fee2e2; color: #991b1b; }
+        .cgms-chip-soil { background: #fef3c7; color: #78350f; }
+        .cgms-info-panel { border: 2px solid #e5e7eb; border-radius: 1rem; padding: 2.2rem; margin-bottom: 2.5rem; }
+        .cgms-info-title { font-size: 1.7rem; font-weight: 800; margin-bottom: 1.8rem; color: #111827; }
+        .cgms-info-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.2rem; }
+        .cgms-info-cell { display: flex; justify-content: space-between; padding: 0.9rem 0; border-bottom: 1px solid #e5e7eb; }
+        .cgms-info-cell:last-child { border-bottom: none; }
+        .cgms-info-key { color: #6b7280; font-weight: 600; }
+        .cgms-info-val { font-weight: 800; color: #111827; }
+        .cgms-tenant-box { background: linear-gradient(135deg, #fef3c7, #fde68a); padding: 2.2rem; border-radius: 1rem; text-align: center; margin-bottom: 2.5rem; }
+        .cgms-tenant-avatar { font-size: 3.5rem; margin-bottom: 1rem; }
+        .cgms-tenant-name { font-size: 1.8rem; font-weight: 900; margin: 0.8rem 0 0.4rem; color: #1f2937; }
+        .cgms-button-dock { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; padding-top: 2.5rem; border-top: 2px solid #e5e7eb; }
+        .cgms-dock-btn { padding: 1.2rem; text-align: center; border-radius: 0.8rem; text-decoration: none; font-weight: 800; }
+        .cgms-dock-back { background: #9ca3af; color: white; }
+        .cgms-dock-back:hover { background: #6b7280; color: white; }
+        .cgms-dock-edit { background: #fbbf24; color: #78350f; }
+        .cgms-dock-edit:hover { background: #f59e0b; color: white; }
+        .cgms-dock-remove { background: #ef4444; color: white; }
+        .cgms-dock-remove:hover { background: #dc2626; color: white; }
+    </style>
+
+    <div class="container">
+        <div class="cgms-detail-card">
+            <header class="cgms-detail-masthead">
+                <div class="cgms-detail-code">@Model.PlotDesignation</div>
+                <div class="cgms-detail-badge">
+                    @(Model.IsOccupied ? "🔒 Currently Occupied" : "✅ Available for Rental")
+                </div>
+            </header>
+            
+            <div class="cgms-detail-body">
+                <section class="cgms-metric-cards">
+                    <div class="cgms-metric-card">
+                        <div class="cgms-metric-num">@Model.SquareMeters</div>
+                        <div class="cgms-metric-label">Square Meters</div>
+                    </div>
+                    <div class="cgms-metric-card">
+                        <div class="cgms-metric-num">@Model.YearlyRentalFee.ToString("C0")</div>
+                        <div class="cgms-metric-label">Annual Fee</div>
+                    </div>
+                </section>
+                
+                <section class="cgms-feature-chips">
+                    <div class="cgms-chip @(Model.WaterAccessAvailable ? "cgms-chip-water" : "cgms-chip-nowater")">
+                        @(Model.WaterAccessAvailable ? "💧 Water Access" : "🚫 No Water")
+                    </div>
+                    <div class="cgms-chip cgms-chip-soil">
+                        🌱 @Model.SoilType Soil Type
+                    </div>
+                </section>
+                
+                <section class="cgms-info-panel">
+                    <h2 class="cgms-info-title">📊 Plot Specifications</h2>
+                    <div class="cgms-info-grid">
+                        <div class="cgms-info-cell">
+                            <span class="cgms-info-key">Plot ID:</span>
+                            <span class="cgms-info-val">#@Model.PlotIdentifier</span>
+                        </div>
+                        <div class="cgms-info-cell">
+                            <span class="cgms-info-key">Designation:</span>
+                            <span class="cgms-info-val">@Model.PlotDesignation</span>
+                        </div>
+                        <div class="cgms-info-cell">
+                            <span class="cgms-info-key">Area:</span>
+                            <span class="cgms-info-val">@Model.SquareMeters m²</span>
+                        </div>
+                        <div class="cgms-info-cell">
+                            <span class="cgms-info-key">Soil:</span>
+                            <span class="cgms-info-val">@Model.SoilType</span>
+                        </div>
+                        <div class="cgms-info-cell">
+                            <span class="cgms-info-key">Status:</span>
+                            <span class="cgms-info-val">@(Model.IsOccupied ? "Occupied" : "Available")</span>
+                        </div>
+                        <div class="cgms-info-cell">
+                            <span class="cgms-info-key">Last Service:</span>
+                            <span class="cgms-info-val">@Model.LastMaintenanceDate.ToString("MMM dd, yyyy")</span>
+                        </div>
+                        <div class="cgms-info-cell">
+                            <span class="cgms-info-key">Water:</span>
+                            <span class="cgms-info-val">@(Model.WaterAccessAvailable ? "Available" : "N/A")</span>
+                        </div>
+                        <div class="cgms-info-cell">
+                            <span class="cgms-info-key">Fee:</span>
+                            <span class="cgms-info-val">@Model.YearlyRentalFee.ToString("C")</span>
+                        </div>
+                    </div>
+                </section>
+                
+                @if (Model.CurrentTenant != null)
+                {
+                    <section class="cgms-tenant-box">
+                        <div class="cgms-tenant-avatar">👤</div>
+                        <h3 style="font-weight: 700; margin-bottom: 0.5rem;">Current Tenant</h3>
+                        <div class="cgms-tenant-name">@Model.CurrentTenant.FullLegalName</div>
+                        <div style="color: #6b7280; margin-bottom: 1.2rem;">@Model.CurrentTenant.EmailContact</div>
+                        <a asp-controller="Members" asp-action="ViewProfile" asp-route-id="@Model.CurrentTenant.MemberId" 
+                           class="btn btn-dark">View Member Profile</a>
+                    </section>
+                }
+                else
+                {
+                    <div class="alert alert-info" style="border-radius: 1rem;">
+                        <h5 style="font-weight: 700;">📢 No Tenant Assigned</h5>
+                        <p style="margin: 0;">This plot is free and ready for assignment.</p>
+                    </div>
+                }
+                
+                <nav class="cgms-button-dock">
+                    <a asp-action="Index" class="cgms-dock-btn cgms-dock-back">← Back</a>
+                    <a asp-action="Modify" asp-route-id="@Model.PlotIdentifier" class="cgms-dock-btn cgms-dock-edit">✏️ Edit</a>
+                    <a asp-action="Remove" asp-route-id="@Model.PlotIdentifier" class="cgms-dock-btn cgms-dock-remove">🗑️ Delete</a>
+                </nav>
+            </div>
+        </div>
+    </div>
+</article>

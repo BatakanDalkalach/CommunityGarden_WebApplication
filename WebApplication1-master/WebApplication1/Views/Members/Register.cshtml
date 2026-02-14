@@ -1,0 +1,155 @@
+@model WebApplication1.Models.GardenMember
+@{
+    ViewData["Title"] = "Register New Member";
+}
+
+<article class="cgms-register-page">
+    <style>
+        .cgms-register-page { background: linear-gradient(to bottom right, #7c3aed, #6d28d9); padding: 3rem 1rem; min-height: 100vh; }
+        .cgms-register-card { max-width: 780px; margin: 0 auto; background: white; border-radius: 1.5rem; overflow: hidden; box-shadow: 0 25px 70px rgba(0,0,0,0.25); }
+        .cgms-register-top { background: linear-gradient(to right, #06b6d4, #0891b2); padding: 3rem; text-align: center; color: white; }
+        .cgms-register-icon { font-size: 4.5rem; margin-bottom: 1rem; }
+        .cgms-register-title { margin: 0; font-size: 2.6rem; font-weight: 900; }
+        .cgms-register-subtitle { margin: 0.6rem 0 0; font-size: 1.2rem; opacity: 0.95; }
+        .cgms-register-form { padding: 3rem; }
+        .cgms-progress-dots { display: flex; justify-content: center; gap: 1rem; margin-bottom: 3rem; }
+        .cgms-progress-dot { width: 14px; height: 14px; border-radius: 50%; background: #06b6d4; }
+        .cgms-section-divider { text-align: center; margin: 2.8rem 0 2.2rem; position: relative; }
+        .cgms-section-divider::before { content: ''; position: absolute; top: 50%; left: 0; right: 0; height: 2px; background: linear-gradient(to right, transparent, #06b6d4, transparent); }
+        .cgms-section-text { position: relative; background: white; padding: 0 1.8rem; color: #06b6d4; font-weight: 900; font-size: 1.2rem; }
+        .cgms-field { margin-bottom: 1.8rem; }
+        .cgms-field-label { display: flex; align-items: center; gap: 0.7rem; font-weight: 800; margin-bottom: 0.7rem; color: #111827; }
+        .cgms-field-icon { font-size: 1.4rem; }
+        .cgms-field-input { width: 100%; padding: 1.1rem 1.4rem; border: 2px solid #d1d5db; border-radius: 1rem; font-size: 1.05rem; }
+        .cgms-field-input:focus { outline: none; border-color: #06b6d4; box-shadow: 0 0 0 4px rgba(6, 182, 212, 0.1); }
+        .cgms-field-hint { display: block; margin-top: 0.5rem; color: #6b7280; font-size: 0.9rem; font-style: italic; }
+        .cgms-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.8rem; }
+        .cgms-checkbox-wrapper { background: linear-gradient(to right, #fef3c7, #fde68a); padding: 1.5rem; border-radius: 1rem; display: flex; align-items: center; gap: 1.2rem; }
+        .cgms-checkbox { width: 26px; height: 26px; }
+        .cgms-checkbox-text { margin: 0; font-weight: 800; font-size: 1.1rem; }
+        .cgms-textarea { width: 100%; padding: 1.1rem 1.4rem; border: 2px solid #d1d5db; border-radius: 1rem; font-size: 1.05rem; min-height: 130px; resize: vertical; font-family: inherit; }
+        .cgms-textarea:focus { outline: none; border-color: #06b6d4; box-shadow: 0 0 0 4px rgba(6, 182, 212, 0.1); }
+        .cgms-submit-bar { display: grid; grid-template-columns: 1fr 2fr; gap: 1.2rem; margin-top: 3rem; padding-top: 2.5rem; border-top: 2px solid #e5e7eb; }
+        .cgms-submit-btn { padding: 1.3rem; text-align: center; border-radius: 1rem; font-weight: 900; font-size: 1.15rem; cursor: pointer; }
+        .cgms-submit-cancel { background: #6b7280; color: white; text-decoration: none; }
+        .cgms-submit-cancel:hover { background: #4b5563; color: white; }
+        .cgms-submit-create { background: linear-gradient(to right, #06b6d4, #0891b2); color: white; border: none; }
+        .cgms-submit-create:hover { background: linear-gradient(to right, #0891b2, #0e7490); }
+    </style>
+
+    <div class="container">
+        <div class="cgms-register-card">
+            <header class="cgms-register-top">
+                <div class="cgms-register-icon">🌱</div>
+                <h1 class="cgms-register-title">Join the Community</h1>
+                <p class="cgms-register-subtitle">Register as a new member</p>
+            </header>
+
+            <form asp-action="Register" method="post" class="cgms-register-form">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                <div class="cgms-progress-dots">
+                    <div class="cgms-progress-dot"></div>
+                    <div class="cgms-progress-dot"></div>
+                    <div class="cgms-progress-dot"></div>
+                </div>
+
+                <div class="cgms-section-divider">
+                    <span class="cgms-section-text">👤 Personal Details</span>
+                </div>
+
+                <div class="cgms-field">
+                    <label asp-for="FullLegalName" class="cgms-field-label">
+                        <span class="cgms-field-icon">📝</span>
+                        <span>Full Name</span>
+                    </label>
+                    <input asp-for="FullLegalName" class="cgms-field-input" placeholder="Enter your full name" />
+                    <span class="cgms-field-hint">As it appears on official documents</span>
+                    <span asp-validation-for="FullLegalName" class="text-danger"></span>
+                </div>
+
+                <div class="cgms-field">
+                    <label asp-for="EmailContact" class="cgms-field-label">
+                        <span class="cgms-field-icon">📧</span>
+                        <span>Email Address</span>
+                    </label>
+                    <input asp-for="EmailContact" type="email" class="cgms-field-input" placeholder="you@example.com" />
+                    <span class="cgms-field-hint">For updates and communications</span>
+                    <span asp-validation-for="EmailContact" class="text-danger"></span>
+                </div>
+
+                <div class="cgms-section-divider">
+                    <span class="cgms-section-text">⭐ Membership</span>
+                </div>
+
+                <div class="cgms-grid">
+                    <div class="cgms-field">
+                        <label asp-for="MembershipTier" class="cgms-field-label">
+                            <span class="cgms-field-icon">🏆</span>
+                            <span>Tier</span>
+                        </label>
+                        <select asp-for="MembershipTier" class="cgms-field-input">
+                            @foreach (var tier in ViewBag.TierOptions as string[])
+                            {
+                                <option value="@tier">@tier</option>
+                            }
+                        </select>
+                        <span asp-validation-for="MembershipTier" class="text-danger"></span>
+                    </div>
+
+                    <div class="cgms-field">
+                        <label asp-for="YearsOfExperience" class="cgms-field-label">
+                            <span class="cgms-field-icon">📚</span>
+                            <span>Experience</span>
+                        </label>
+                        <input asp-for="YearsOfExperience" type="number" min="0" max="50" class="cgms-field-input" placeholder="0" />
+                        <span class="cgms-field-hint">Years of gardening experience</span>
+                        <span asp-validation-for="YearsOfExperience" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="cgms-field">
+                    <label asp-for="RegistrationDate" class="cgms-field-label">
+                        <span class="cgms-field-icon">📅</span>
+                        <span>Join Date</span>
+                    </label>
+                    <input asp-for="RegistrationDate" type="date" class="cgms-field-input" />
+                    <span asp-validation-for="RegistrationDate" class="text-danger"></span>
+                </div>
+
+                <div class="cgms-section-divider">
+                    <span class="cgms-section-text">🌿 Preferences</span>
+                </div>
+
+                <div class="cgms-field">
+                    <div class="cgms-checkbox-wrapper">
+                        <input asp-for="PreferOrganicOnly" type="checkbox" class="cgms-checkbox" />
+                        <label asp-for="PreferOrganicOnly" class="cgms-checkbox-text">
+                            🌱 I prefer organic gardening methods
+                        </label>
+                    </div>
+                </div>
+
+                <div class="cgms-field">
+                    <label asp-for="GardeningInterests" class="cgms-field-label">
+                        <span class="cgms-field-icon">💭</span>
+                        <span>Interests (Optional)</span>
+                    </label>
+                    <textarea asp-for="GardeningInterests" class="cgms-textarea" 
+                              placeholder="Share your gardening interests, favorite plants, or goals..."></textarea>
+                    <span class="cgms-field-hint">Tell us about your gardening passions</span>
+                    <span asp-validation-for="GardeningInterests" class="text-danger"></span>
+                </div>
+
+                <nav class="cgms-submit-bar">
+                    <a asp-action="Index" class="cgms-submit-btn cgms-submit-cancel">Cancel</a>
+                    <button type="submit" class="cgms-submit-btn cgms-submit-create">Complete Registration</button>
+                </nav>
+            </form>
+        </div>
+    </div>
+</article>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

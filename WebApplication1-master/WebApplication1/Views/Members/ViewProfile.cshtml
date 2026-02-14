@@ -1,0 +1,168 @@
+@model WebApplication1.Models.GardenMember
+@{
+    ViewData["Title"] = "Member Profile";
+    var tierGradient = Model.MembershipTier == "Premium" ? "linear-gradient(135deg, #06b6d4, #0891b2)" : 
+                        Model.MembershipTier == "Standard" ? "linear-gradient(135deg, #f59e0b, #d97706)" : 
+                        "linear-gradient(135deg, #8b5cf6, #7c3aed)";
+    var yearsAsMember = (DateTime.Today - Model.RegistrationDate).Days / 365;
+}
+
+<article class="cgms-profile-page">
+    <style>
+        .cgms-profile-page { background: radial-gradient(circle at top, #fae8ff, #f3f4f6); padding: 3rem 1rem; min-height: 100vh; }
+        .cgms-profile-wrapper { max-width: 1020px; margin: 0 auto; background: white; border-radius: 1.5rem; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.15); }
+        .cgms-profile-hero { height: 280px; background: @tierGradient; position: relative; }
+        .cgms-hero-badge { position: absolute; top: 2rem; right: 2rem; background: rgba(255,255,255,0.3); padding: 1rem 2rem; border-radius: 1rem; color: white; font-weight: 900; font-size: 1.2rem; }
+        .cgms-hero-avatar { position: absolute; bottom: -70px; left: 50%; transform: translateX(-50%); width: 140px; height: 140px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 5rem; box-shadow: 0 12px 36px rgba(0,0,0,0.2); border: 8px solid white; }
+        .cgms-profile-content { padding: 5.5rem 3rem 3rem; }
+        .cgms-profile-name { text-align: center; font-size: 3rem; font-weight: 900; margin: 0 0 0.6rem; color: #111827; }
+        .cgms-profile-email { text-align: center; font-size: 1.3rem; color: #6b7280; margin-bottom: 2rem; }
+        .cgms-organic-badge { display: inline-block; background: #d1fae5; color: #065f46; padding: 0.8rem 1.8rem; border-radius: 0.8rem; font-weight: 800; font-size: 1.1rem; }
+        .cgms-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin: 3rem 0; }
+        .cgms-stat-card { background: linear-gradient(135deg, #8b5cf6, #7c3aed); padding: 2rem; border-radius: 1.2rem; text-align: center; color: white; }
+        .cgms-stat-card:nth-child(2) { background: linear-gradient(135deg, #ec4899, #be185d); }
+        .cgms-stat-card:nth-child(3) { background: linear-gradient(135deg, #06b6d4, #0891b2); }
+        .cgms-stat-card:nth-child(4) { background: linear-gradient(135deg, #10b981, #059669); }
+        .cgms-stat-icon { font-size: 2.5rem; margin-bottom: 0.6rem; }
+        .cgms-stat-number { font-size: 2.5rem; font-weight: 900; }
+        .cgms-stat-text { font-size: 0.95rem; opacity: 0.9; margin-top: 0.4rem; }
+        .cgms-info-section { background: #f9fafb; padding: 2.5rem; border-radius: 1.2rem; margin: 2.5rem 0; }
+        .cgms-section-heading { font-size: 1.8rem; font-weight: 900; margin-bottom: 2rem; color: #111827; display: flex; align-items: center; gap: 1rem; }
+        .cgms-info-boxes { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+        .cgms-info-item { background: white; padding: 1.5rem; border-radius: 1rem; }
+        .cgms-info-label { font-size: 0.85rem; color: #6b7280; margin-bottom: 0.5rem; }
+        .cgms-info-data { font-weight: 800; font-size: 1.2rem; color: #111827; }
+        .cgms-interests-box { background: linear-gradient(120deg, #fef3c7, #fde68a); padding: 2rem; border-radius: 1.2rem; }
+        .cgms-interests-text { font-size: 1.2rem; color: #1f2937; line-height: 1.8; margin: 0; }
+        .cgms-plots-section { margin-top: 2rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; }
+        .cgms-plot-card { background: white; padding: 1.8rem; border-radius: 1rem; border: 2px solid #e5e7eb; text-decoration: none; display: block; }
+        .cgms-plot-card:hover { border-color: #7c3aed; }
+        .cgms-plot-code { font-size: 2.2rem; font-weight: 900; color: #7c3aed; margin-bottom: 0.8rem; }
+        .cgms-plot-details { font-size: 0.95rem; color: #6b7280; }
+        .cgms-back-btn { display: block; padding: 1.3rem; background: #6b7280; color: white; text-align: center; border-radius: 1rem; text-decoration: none; font-weight: 900; font-size: 1.2rem; margin-top: 3rem; }
+        .cgms-back-btn:hover { background: #4b5563; color: white; }
+    </style>
+
+    <div class="container">
+        <div class="cgms-profile-wrapper">
+            <div class="cgms-profile-hero">
+                <div class="cgms-hero-badge">
+                    @if (Model.MembershipTier == "Premium") { <text>👑 Premium</text> }
+                    else if (Model.MembershipTier == "Standard") { <text>⭐ Standard</text> }
+                    else { <text>🌟 Basic</text> }
+                </div>
+                <div class="cgms-hero-avatar">@(Model.PreferOrganicOnly ? "🌿" : "👨‍🌾")</div>
+            </div>
+
+            <div class="cgms-profile-content">
+                <h1 class="cgms-profile-name">@Model.FullLegalName</h1>
+                <p class="cgms-profile-email">📧 @Model.EmailContact</p>
+
+                @if (Model.PreferOrganicOnly)
+                {
+                    <div style="text-align: center; margin-bottom: 2.5rem;">
+                        <span class="cgms-organic-badge">🌱 Certified Organic Gardener</span>
+                    </div>
+                }
+
+                <section class="cgms-stats-grid">
+                    <div class="cgms-stat-card">
+                        <div class="cgms-stat-icon">📅</div>
+                        <div class="cgms-stat-number">@yearsAsMember</div>
+                        <div class="cgms-stat-text">Years Member</div>
+                    </div>
+                    <div class="cgms-stat-card">
+                        <div class="cgms-stat-icon">⭐</div>
+                        <div class="cgms-stat-number">@Model.YearsOfExperience</div>
+                        <div class="cgms-stat-text">Years Experience</div>
+                    </div>
+                    <div class="cgms-stat-card">
+                        <div class="cgms-stat-icon">📍</div>
+                        <div class="cgms-stat-number">@(Model.ManagedPlots?.Count ?? 0)</div>
+                        <div class="cgms-stat-text">Plots</div>
+                    </div>
+                    <div class="cgms-stat-card">
+                        <div class="cgms-stat-icon">🌾</div>
+                        <div class="cgms-stat-number">@(Model.RecordedHarvests?.Count ?? 0)</div>
+                        <div class="cgms-stat-text">Harvests</div>
+                    </div>
+                </section>
+
+                <section class="cgms-info-section">
+                    <h2 class="cgms-section-heading">
+                        <span>📋</span>
+                        <span>Member Information</span>
+                    </h2>
+                    <div class="cgms-info-boxes">
+                        <div class="cgms-info-item">
+                            <div class="cgms-info-label">Member ID</div>
+                            <div class="cgms-info-data">#@Model.MemberId</div>
+                        </div>
+                        <div class="cgms-info-item">
+                            <div class="cgms-info-label">Full Name</div>
+                            <div class="cgms-info-data">@Model.FullLegalName</div>
+                        </div>
+                        <div class="cgms-info-item">
+                            <div class="cgms-info-label">Email</div>
+                            <div class="cgms-info-data" style="font-size: 1rem; word-break: break-all;">@Model.EmailContact</div>
+                        </div>
+                        <div class="cgms-info-item">
+                            <div class="cgms-info-label">Tier</div>
+                            <div class="cgms-info-data">@Model.MembershipTier</div>
+                        </div>
+                        <div class="cgms-info-item">
+                            <div class="cgms-info-label">Joined</div>
+                            <div class="cgms-info-data">@Model.RegistrationDate.ToString("MMMM dd, yyyy")</div>
+                        </div>
+                        <div class="cgms-info-item">
+                            <div class="cgms-info-label">Experience</div>
+                            <div class="cgms-info-data">@Model.YearsOfExperience years</div>
+                        </div>
+                    </div>
+                </section>
+
+                @if (!string.IsNullOrEmpty(Model.GardeningInterests))
+                {
+                    <section class="cgms-info-section">
+                        <h2 class="cgms-section-heading">
+                            <span>💡</span>
+                            <span>Gardening Interests</span>
+                        </h2>
+                        <div class="cgms-interests-box">
+                            <p class="cgms-interests-text">@Model.GardeningInterests</p>
+                        </div>
+                    </section>
+                }
+
+                @if (Model.ManagedPlots?.Any() == true)
+                {
+                    <section class="cgms-info-section">
+                        <h2 class="cgms-section-heading">
+                            <span>🌱</span>
+                            <span>Managed Plots (@Model.ManagedPlots.Count)</span>
+                        </h2>
+                        <div class="cgms-plots-section">
+                            @foreach (var plt in Model.ManagedPlots)
+                            {
+                                <a asp-controller="Plots" asp-action="ViewDetails" asp-route-id="@plt.PlotIdentifier" class="cgms-plot-card">
+                                    <div class="cgms-plot-code">@plt.PlotDesignation</div>
+                                    <div class="cgms-plot-details">📏 @plt.SquareMeters m² • @plt.SoilType</div>
+                                    <div class="cgms-plot-details">💵 @plt.YearlyRentalFee.ToString("C")/year</div>
+                                </a>
+                            }
+                        </div>
+                    </section>
+                }
+                else
+                {
+                    <div class="alert alert-info" style="border-radius: 1.2rem;">
+                        <h5 style="font-weight: 700;">📢 No Assigned Plots</h5>
+                        <p style="margin: 0;">This member doesn't manage any plots yet.</p>
+                    </div>
+                }
+
+                <a asp-action="Index" class="cgms-back-btn">← Return to Members</a>
+            </div>
+        </div>
+    </div>
+</article>

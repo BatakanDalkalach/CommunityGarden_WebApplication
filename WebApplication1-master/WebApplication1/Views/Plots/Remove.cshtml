@@ -1,0 +1,105 @@
+@model WebApplication1.Models.GardenPlot
+@{
+    ViewData["Title"] = "Remove Plot";
+}
+
+<article class="cgms-delete-page">
+    <style>
+        .cgms-delete-page { background: linear-gradient(135deg, #7c3aed, #6d28d9); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; }
+        .cgms-delete-container { background: white; max-width: 680px; width: 100%; border-radius: 1.5rem; overflow: hidden; box-shadow: 0 30px 80px rgba(0,0,0,0.3); }
+        .cgms-delete-header { background: #dc2626; padding: 3rem; text-align: center; color: white; }
+        .cgms-delete-icon { font-size: 5rem; margin-bottom: 1.2rem; animation: pulse-animation 2s infinite; }
+        @@keyframes pulse-animation { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        .cgms-delete-heading { margin: 0; font-size: 2.5rem; font-weight: 900; }
+        .cgms-delete-warning { margin: 0.6rem 0 0; font-size: 1.15rem; }
+        .cgms-delete-body { padding: 2.8rem; }
+        .cgms-plot-showcase { background: linear-gradient(120deg, #fef3c7, #fde68a); padding: 2rem; border-radius: 1rem; border: 3px solid #dc2626; text-align: center; margin-bottom: 2.5rem; }
+        .cgms-showcase-code { font-size: 3.5rem; font-weight: 900; color: #1f2937; margin-bottom: 1.5rem; }
+        .cgms-showcase-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.2rem; }
+        .cgms-showcase-item { background: white; padding: 1rem; border-radius: 0.8rem; }
+        .cgms-showcase-label { font-size: 0.8rem; color: #6b7280; margin-bottom: 0.4rem; }
+        .cgms-showcase-value { font-weight: 800; font-size: 1.15rem; }
+        .cgms-tenant-warning { background: #fee2e2; border: 2px solid #dc2626; padding: 1.3rem; border-radius: 0.8rem; margin-bottom: 2.5rem; color: #991b1b; }
+        .cgms-consequences { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 1.5rem; margin-bottom: 2.5rem; }
+        .cgms-consequences-title { font-weight: 800; color: #78350f; font-size: 1.15rem; margin-bottom: 1rem; }
+        .cgms-consequences-list { margin: 0.8rem 0 0 1.5rem; padding: 0; color: #78350f; }
+        .cgms-consequences-list li { margin-bottom: 0.5rem; }
+        .cgms-delete-actions { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.2rem; }
+        .cgms-delete-btn { padding: 1.3rem; text-align: center; border-radius: 0.8rem; font-weight: 800; font-size: 1.1rem; cursor: pointer; text-decoration: none; }
+        .cgms-delete-keep { background: #10b981; color: white; }
+        .cgms-delete-keep:hover { background: #059669; color: white; }
+        .cgms-delete-confirm { background: #dc2626; color: white; border: none; }
+        .cgms-delete-confirm:hover { background: #b91c1c; }
+        .cgms-delete-footnote { text-align: center; margin-top: 1.5rem; font-size: 0.95rem; color: #6b7280; }
+    </style>
+
+    <div class="cgms-delete-container">
+        <header class="cgms-delete-header">
+            <div class="cgms-delete-icon">⚠️</div>
+            <h1 class="cgms-delete-heading">Permanent Deletion</h1>
+            <p class="cgms-delete-warning">This action is irreversible</p>
+        </header>
+        
+        <div class="cgms-delete-body">
+            <section class="cgms-plot-showcase">
+                <div class="cgms-showcase-code">@Model.PlotDesignation</div>
+                <div class="cgms-showcase-grid">
+                    <div class="cgms-showcase-item">
+                        <div class="cgms-showcase-label">Area</div>
+                        <div class="cgms-showcase-value">@Model.SquareMeters m²</div>
+                    </div>
+                    <div class="cgms-showcase-item">
+                        <div class="cgms-showcase-label">Fee</div>
+                        <div class="cgms-showcase-value">@Model.YearlyRentalFee.ToString("C0")</div>
+                    </div>
+                    <div class="cgms-showcase-item">
+                        <div class="cgms-showcase-label">Soil</div>
+                        <div class="cgms-showcase-value">@Model.SoilType</div>
+                    </div>
+                    <div class="cgms-showcase-item">
+                        <div class="cgms-showcase-label">Status</div>
+                        <div class="cgms-showcase-value">@(Model.IsOccupied ? "Occupied" : "Available")</div>
+                    </div>
+                </div>
+            </section>
+            
+            @if (Model.CurrentTenant != null)
+            {
+                <aside class="cgms-tenant-warning">
+                    <strong style="font-size: 1.1rem;">⚠️ Active Tenant Detected</strong>
+                    <p style="margin: 0.6rem 0 0;">
+                        Plot is assigned to <strong>@Model.CurrentTenant.FullLegalName</strong>. 
+                        Deleting will remove this relationship.
+                    </p>
+                </aside>
+            }
+            
+            <section class="cgms-consequences">
+                <div class="cgms-consequences-title">⚠️ Consequences of Deletion</div>
+                <p style="color: #78350f; margin: 0.6rem 0;">
+                    Deleting plot <strong>@Model.PlotDesignation</strong> will:
+                </p>
+                <ul class="cgms-consequences-list">
+                    <li>Remove the plot permanently from database</li>
+                    <li>Delete all linked records</li>
+                    <li>Clear tenant assignments</li>
+                    <li>Cannot be recovered</li>
+                </ul>
+            </section>
+            
+            <form asp-action="Remove" method="post">
+                <input type="hidden" asp-for="PlotIdentifier" />
+                
+                <nav class="cgms-delete-actions">
+                    <a asp-action="Index" class="cgms-delete-btn cgms-delete-keep">✓ Keep Plot</a>
+                    <button type="submit" class="cgms-delete-btn cgms-delete-confirm">🗑️ Delete Forever</button>
+                </nav>
+            </form>
+            
+            <div class="cgms-delete-footnote">
+                Not sure? <a asp-action="ViewDetails" asp-route-id="@Model.PlotIdentifier">View details</a> or 
+                <a asp-action="Modify" asp-route-id="@Model.PlotIdentifier">edit plot</a> instead
+            </div>
+        </div>
+    </div>
+</article>

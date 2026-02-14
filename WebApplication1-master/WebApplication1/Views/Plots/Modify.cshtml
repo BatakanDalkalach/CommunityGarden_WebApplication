@@ -1,0 +1,129 @@
+@model WebApplication1.Models.GardenPlot
+@{
+    ViewData["Title"] = "Modify Plot";
+}
+
+<article class="cgms-edit-wrapper">
+    <style>
+        .cgms-edit-wrapper { background: #f9fafb; padding: 2.5rem 1rem; min-height: 100vh; }
+        .cgms-edit-card { max-width: 880px; margin: 0 auto; background: white; border-radius: 1.2rem; overflow: hidden; box-shadow: 0 6px 28px rgba(0,0,0,0.1); }
+        .cgms-edit-topbar { background: linear-gradient(110deg, #ec4899, #be185d); padding: 2.2rem; color: white; display: flex; justify-content: space-between; align-items: center; }
+        .cgms-edit-title { margin: 0; font-size: 2rem; font-weight: 900; }
+        .cgms-edit-subtitle { margin: 0.3rem 0 0; opacity: 0.92; }
+        .cgms-edit-id-badge { background: rgba(255,255,255,0.25); padding: 0.7rem 1.3rem; border-radius: 0.8rem; font-weight: 800; }
+        .cgms-edit-form { padding: 2.8rem; }
+        .cgms-alert-box { background: #dbeafe; border-left: 4px solid #0369a1; padding: 1.2rem; margin-bottom: 2rem; color: #0c4a6e; }
+        .cgms-section-title { font-size: 1.4rem; font-weight: 800; color: #ec4899; margin: 2.5rem 0 1.8rem; padding-bottom: 0.6rem; border-bottom: 2px solid #ec4899; }
+        .cgms-field-wrapper { margin-bottom: 1.8rem; }
+        .cgms-field-label { display: block; font-weight: 700; margin-bottom: 0.6rem; color: #111827; }
+        .cgms-field-input { width: 100%; padding: 1rem; border: 2px solid #d1d5db; border-radius: 0.8rem; font-size: 1.05rem; }
+        .cgms-field-input:focus { outline: none; border-color: #ec4899; }
+        .cgms-grid-two { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.8rem; }
+        .cgms-toggle-box { background: #f9fafb; padding: 1.3rem; border-radius: 0.8rem; display: flex; align-items: center; gap: 1rem; margin-bottom: 1.2rem; }
+        .cgms-toggle-input { width: 24px; height: 24px; }
+        .cgms-toggle-label { margin: 0; font-weight: 600; }
+        .cgms-action-bar { display: grid; grid-template-columns: 1fr 2fr; gap: 1.2rem; margin-top: 2.5rem; padding-top: 2rem; border-top: 2px solid #e5e7eb; }
+        .cgms-action-btn { padding: 1.2rem; text-align: center; border-radius: 0.8rem; font-weight: 800; font-size: 1.1rem; cursor: pointer; }
+        .cgms-action-cancel { background: #9ca3af; color: white; text-decoration: none; }
+        .cgms-action-cancel:hover { background: #6b7280; color: white; }
+        .cgms-action-save { background: #10b981; color: white; border: none; }
+        .cgms-action-save:hover { background: #059669; }
+    </style>
+
+    <div class="container">
+        <div class="cgms-edit-card">
+            <header class="cgms-edit-topbar">
+                <div>
+                    <h1 class="cgms-edit-title">✏️ Modify Plot Information</h1>
+                    <p class="cgms-edit-subtitle">Update plot @Model.PlotDesignation</p>
+                </div>
+                <div class="cgms-edit-id-badge">ID: #@Model.PlotIdentifier</div>
+            </header>
+            
+            <form asp-action="Modify" method="post" class="cgms-edit-form">
+                <input type="hidden" asp-for="PlotIdentifier" />
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                
+                <div class="cgms-alert-box">
+                    <strong>Editing:</strong> Plot @Model.PlotDesignation (System ID: @Model.PlotIdentifier)
+                </div>
+                
+                <h2 class="cgms-section-title">📍 Plot Identification</h2>
+                
+                <div class="cgms-field-wrapper">
+                    <label asp-for="PlotDesignation" class="cgms-field-label"></label>
+                    <input asp-for="PlotDesignation" class="cgms-field-input" />
+                    <span asp-validation-for="PlotDesignation" class="text-danger"></span>
+                </div>
+                
+                <h2 class="cgms-section-title">📏 Physical Attributes</h2>
+                
+                <div class="cgms-grid-two">
+                    <div class="cgms-field-wrapper">
+                        <label asp-for="SquareMeters" class="cgms-field-label"></label>
+                        <input asp-for="SquareMeters" type="number" step="0.1" class="cgms-field-input" />
+                        <span asp-validation-for="SquareMeters" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="cgms-field-wrapper">
+                        <label asp-for="SoilType" class="cgms-field-label"></label>
+                        <select asp-for="SoilType" class="cgms-field-input">
+                            <option value="Loamy">Loamy</option>
+                            <option value="Sandy">Sandy</option>
+                            <option value="Clay">Clay</option>
+                            <option value="Silty">Silty</option>
+                            <option value="Peaty">Peaty</option>
+                            <option value="Chalky">Chalky</option>
+                        </select>
+                        <span asp-validation-for="SoilType" class="text-danger"></span>
+                    </div>
+                </div>
+                
+                <h2 class="cgms-section-title">💰 Financial & Maintenance</h2>
+                
+                <div class="cgms-grid-two">
+                    <div class="cgms-field-wrapper">
+                        <label asp-for="YearlyRentalFee" class="cgms-field-label"></label>
+                        <input asp-for="YearlyRentalFee" type="number" step="0.01" class="cgms-field-input" />
+                        <span asp-validation-for="YearlyRentalFee" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="cgms-field-wrapper">
+                        <label asp-for="LastMaintenanceDate" class="cgms-field-label"></label>
+                        <input asp-for="LastMaintenanceDate" type="date" class="cgms-field-input" />
+                        <span asp-validation-for="LastMaintenanceDate" class="text-danger"></span>
+                    </div>
+                </div>
+                
+                <h2 class="cgms-section-title">⚙️ Features & Status</h2>
+                
+                <div class="cgms-toggle-box">
+                    <input asp-for="WaterAccessAvailable" type="checkbox" class="cgms-toggle-input" />
+                    <label asp-for="WaterAccessAvailable" class="cgms-toggle-label">Water access available</label>
+                </div>
+                
+                <div class="cgms-toggle-box">
+                    <input asp-for="IsOccupied" type="checkbox" class="cgms-toggle-input" />
+                    <label asp-for="IsOccupied" class="cgms-toggle-label">Plot is currently occupied</label>
+                </div>
+                
+                <div class="cgms-field-wrapper">
+                    <label asp-for="AssignedGardenerId" class="cgms-field-label">Tenant Assignment</label>
+                    <select asp-for="AssignedGardenerId" class="cgms-field-input" asp-items="ViewBag.MemberOptions">
+                        <option value="">-- No assignment --</option>
+                    </select>
+                    <span asp-validation-for="AssignedGardenerId" class="text-danger"></span>
+                </div>
+                
+                <nav class="cgms-action-bar">
+                    <a asp-action="Index" class="cgms-action-btn cgms-action-cancel">Cancel</a>
+                    <button type="submit" class="cgms-action-btn cgms-action-save">💾 Save Changes</button>
+                </nav>
+            </form>
+        </div>
+    </div>
+</article>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

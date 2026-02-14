@@ -1,0 +1,154 @@
+@model IEnumerable<WebApplication1.Models.GardenMember>
+@{
+    ViewData["Title"] = "Community Members";
+    var organicMembers = Model.Count(m => m.PreferOrganicOnly);
+}
+
+<article class="cgms-members-page">
+    <style>
+        .cgms-members-page { background: linear-gradient(180deg, #dbeafe, #fff); padding: 2.5rem 1rem; min-height: 100vh; }
+        .cgms-members-banner { background: linear-gradient(110deg, #06b6d4, #0891b2); padding: 3rem; border-radius: 1.2rem; color: white; margin-bottom: 2.5rem; }
+        .cgms-banner-title { font-size: 3rem; font-weight: 900; margin: 0 0 0.6rem; }
+        .cgms-banner-stats { display: flex; gap: 2.5rem; margin-top: 1.8rem; }
+        .cgms-stat-box { background: rgba(255,255,255,0.25); padding: 1rem 1.8rem; border-radius: 1rem; }
+        .cgms-stat-value { font-size: 2.2rem; font-weight: 900; margin-right: 0.6rem; }
+        .cgms-control-panel { background: white; padding: 1.8rem; border-radius: 1rem; box-shadow: 0 3px 14px rgba(0,0,0,0.08); margin-bottom: 2.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem; }
+        .cgms-filters { display: flex; gap: 1rem; flex-wrap: wrap; }
+        .cgms-filter-link { padding: 0.8rem 1.6rem; border: 2px solid #e5e7eb; border-radius: 2rem; background: white; text-decoration: none; color: #6b7280; font-weight: 700; }
+        .cgms-filter-link:hover { border-color: #06b6d4; color: #06b6d4; }
+        .cgms-filter-link.active { background: #06b6d4; color: white; border-color: #06b6d4; }
+        .cgms-register-btn { background: #10b981; color: white; padding: 0.9rem 2rem; border-radius: 0.8rem; text-decoration: none; font-weight: 800; }
+        .cgms-register-btn:hover { background: #059669; color: white; }
+        .cgms-members-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); gap: 2rem; }
+        .cgms-member-card { background: white; border-radius: 1.2rem; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,0.09); }
+        .cgms-member-card:hover { transform: translateY(-8px); transition: transform 0.3s ease; box-shadow: 0 8px 28px rgba(0,0,0,0.14); }
+        .cgms-card-top { padding: 2.5rem; text-align: center; color: white; position: relative; }
+        .cgms-card-top.basic { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+        .cgms-card-top.standard { background: linear-gradient(135deg, #f59e0b, #d97706); }
+        .cgms-card-top.premium { background: linear-gradient(135deg, #06b6d4, #0891b2); }
+        .cgms-tier-tag { position: absolute; top: 1rem; right: 1rem; background: rgba(255,255,255,0.3); padding: 0.5rem 1rem; border-radius: 0.6rem; font-size: 0.85rem; font-weight: 800; }
+        .cgms-member-avatar { width: 95px; height: 95px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 3rem; margin: 0 auto 1rem; box-shadow: 0 6px 18px rgba(0,0,0,0.2); }
+        .cgms-member-name { font-size: 1.5rem; font-weight: 900; margin: 0; }
+        .cgms-card-details { padding: 2rem; }
+        .cgms-detail-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px dotted #e5e7eb; }
+        .cgms-detail-row:last-of-type { border-bottom: none; }
+        .cgms-detail-icon { font-size: 1.4rem; width: 38px; text-align: center; }
+        .cgms-detail-content { flex: 1; }
+        .cgms-detail-label { font-size: 0.8rem; color: #6b7280; margin-bottom: 0.2rem; }
+        .cgms-detail-value { font-weight: 700; color: #111827; }
+        .cgms-tags { display: flex; gap: 0.7rem; margin: 1.5rem 0; flex-wrap: wrap; }
+        .cgms-tag { background: #dbeafe; color: #0369a1; padding: 0.5rem 1rem; border-radius: 0.6rem; font-size: 0.85rem; font-weight: 700; }
+        .cgms-tag.organic { background: #d1fae5; color: #065f46; }
+        .cgms-interests { font-size: 0.9rem; color: #6b7280; margin: 1.5rem 0; }
+        .cgms-profile-btn { display: block; width: 100%; padding: 1rem; background: linear-gradient(135deg, #7c3aed, #6d28d9); color: white; text-align: center; text-decoration: none; font-weight: 800; border-radius: 0.8rem; }
+        .cgms-profile-btn:hover { background: linear-gradient(135deg, #6d28d9, #5b21b6); color: white; }
+        .cgms-empty { background: white; padding: 4rem 2rem; border-radius: 1.2rem; text-align: center; }
+    </style>
+
+    <div class="container">
+        <header class="cgms-members-banner">
+            <h1 class="cgms-banner-title">👥 Community Members</h1>
+            <p style="margin: 0;">Connect with fellow gardeners</p>
+            <div class="cgms-banner-stats">
+                <div class="cgms-stat-box">
+                    <span class="cgms-stat-value">@Model.Count()</span>
+                    <span>Members</span>
+                </div>
+                <div class="cgms-stat-box">
+                    <span class="cgms-stat-value">@organicMembers</span>
+                    <span>Organic</span>
+                </div>
+            </div>
+        </header>
+
+        @if (TempData["WelcomeMsg"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show">
+                <strong>🎉</strong> @TempData["WelcomeMsg"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
+
+        <section class="cgms-control-panel">
+            <div class="cgms-filters">
+                <a href="@Url.Action("Index")" class="cgms-filter-link @(ViewBag.SelectedTier == null ? "active" : "")">All</a>
+                <a href="@Url.Action("Index", new { tier = "Basic" })" class="cgms-filter-link @(ViewBag.SelectedTier == "Basic" ? "active" : "")">Basic</a>
+                <a href="@Url.Action("Index", new { tier = "Standard" })" class="cgms-filter-link @(ViewBag.SelectedTier == "Standard" ? "active" : "")">Standard</a>
+                <a href="@Url.Action("Index", new { tier = "Premium" })" class="cgms-filter-link @(ViewBag.SelectedTier == "Premium" ? "active" : "")">Premium</a>
+            </div>
+            <a asp-action="Register" class="cgms-register-btn">+ Register</a>
+        </section>
+
+        @if (!Model.Any())
+        {
+            <section class="cgms-empty">
+                <h3>No members found</h3>
+                <p>Register your first member</p>
+                <a asp-action="Register" class="btn btn-primary mt-3">Register Member</a>
+            </section>
+        }
+        else
+        {
+            <section class="cgms-members-grid">
+                @foreach (var mem in Model.OrderBy(m => m.FullLegalName))
+                {
+                    <article class="cgms-member-card">
+                        <header class="cgms-card-top @mem.MembershipTier.ToLower()">
+                            <div class="cgms-tier-tag">@mem.MembershipTier</div>
+                            <div class="cgms-member-avatar">
+                                @(mem.PreferOrganicOnly ? "🌿" : "👨‍🌾")
+                            </div>
+                            <h3 class="cgms-member-name">@mem.FullLegalName</h3>
+                        </header>
+
+                        <div class="cgms-card-details">
+                            <div class="cgms-detail-row">
+                                <div class="cgms-detail-icon">📧</div>
+                                <div class="cgms-detail-content">
+                                    <div class="cgms-detail-label">Email</div>
+                                    <div class="cgms-detail-value">@mem.EmailContact</div>
+                                </div>
+                            </div>
+
+                            <div class="cgms-detail-row">
+                                <div class="cgms-detail-icon">📅</div>
+                                <div class="cgms-detail-content">
+                                    <div class="cgms-detail-label">Joined</div>
+                                    <div class="cgms-detail-value">@mem.RegistrationDate.ToString("MMM yyyy")</div>
+                                </div>
+                            </div>
+
+                            <div class="cgms-detail-row">
+                                <div class="cgms-detail-icon">⭐</div>
+                                <div class="cgms-detail-content">
+                                    <div class="cgms-detail-label">Experience</div>
+                                    <div class="cgms-detail-value">@mem.YearsOfExperience years</div>
+                                </div>
+                            </div>
+
+                            <div class="cgms-tags">
+                                @if (mem.PreferOrganicOnly)
+                                {
+                                    <span class="cgms-tag organic">🌱 Organic</span>
+                                }
+                                @if (mem.ManagedPlots?.Any() == true)
+                                {
+                                    <span class="cgms-tag">📍 @mem.ManagedPlots.Count plot(s)</span>
+                                }
+                            </div>
+
+                            @if (!string.IsNullOrEmpty(mem.GardeningInterests))
+                            {
+                                <div class="cgms-interests">
+                                    <strong>Interests:</strong> @mem.GardeningInterests
+                                </div>
+                            }
+
+                            <a asp-action="ViewProfile" asp-route-id="@mem.MemberId" class="cgms-profile-btn">View Profile</a>
+                        </div>
+                    </article>
+                }
+            </section>
+        }
+    </div>
+</article>
