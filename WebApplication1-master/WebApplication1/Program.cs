@@ -58,6 +58,8 @@ app.UseAuthorization();
 // Активиране на авторизация
 
 app.MapStaticAssets();
+// Map static assets (custom extension)
+// Свързване на статични ресурси (потребителско разширение)
 
 app.MapControllerRoute(
     name: "default",
