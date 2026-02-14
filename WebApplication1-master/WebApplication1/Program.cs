@@ -31,6 +31,7 @@ builder.Services.AddScoped<MemberManagementService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+// Настройка HTTP заявките
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
