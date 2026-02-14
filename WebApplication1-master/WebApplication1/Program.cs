@@ -20,6 +20,8 @@ builder.Services.AddDbContext<CommunityGardenDatabase>(options =>
     if (connectionString.Contains("localdb") || connectionString.Contains("sqlexpress", StringComparison.OrdinalIgnoreCase))
     {
         options.UseSqlServer(connectionString);
+        // Using SQLite for all other cases
+        // Използване на SQLite за всички други случаи
     }
     else
     {
