@@ -54,6 +54,8 @@ app.UseRouting();
 // Активиране на маршрутизация
 
 app.UseAuthorization();
+// Enable authorization
+// Активиране на авторизация
 
 app.MapStaticAssets();
 
