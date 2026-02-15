@@ -7,6 +7,8 @@ namespace WebApplication1.Models
     {
         public int RecordId { get; set; }
 
+        // EN: Primary key of the harvest record.
+        // BG: Основен ключ на записа за реколта.
         [Required]
         public int PlotIdentifier { get; set; }
 
