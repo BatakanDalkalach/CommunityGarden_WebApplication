@@ -34,6 +34,10 @@ namespace WebApplication1.Models
         [Display(Name = "Crop/Vegetable Name")]
         public string CropName { get; set; } = string.Empty;
 
+        // EN: Quantity of harvested crop in kilograms.
+        // Allowed range: 0.1 to 1000 kg.
+        // BG: Количество на реколтата в килограми.
+        // Допустим диапазон: 0.1 до 1000 кг.
         [Required]
         [Range(0.1, 1000.0, ErrorMessage = "Quantity: 0.1-1000 kg")]
         [Display(Name = "Quantity Harvested (kg)")]
