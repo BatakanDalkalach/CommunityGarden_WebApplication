@@ -12,6 +12,8 @@ namespace WebApplication1.Models
         [Required]
         public int PlotIdentifier { get; set; }
 
+        // EN: Navigation property to the associated GardenPlot entity.
+        // BG: Навигационно свойство към свързания обект GardenPlot.
         [ForeignKey(nameof(PlotIdentifier))]
         public virtual GardenPlot? SourcePlot { get; set; }
 
