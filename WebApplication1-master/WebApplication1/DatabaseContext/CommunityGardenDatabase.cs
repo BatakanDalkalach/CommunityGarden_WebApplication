@@ -58,6 +58,7 @@ namespace WebApplication1.DatabaseContext
             });
 
             // Seed starter data
+            // Начални данни (Seed данни) за базата
             builder.Entity<GardenMember>().HasData(
                 new GardenMember
                 {
