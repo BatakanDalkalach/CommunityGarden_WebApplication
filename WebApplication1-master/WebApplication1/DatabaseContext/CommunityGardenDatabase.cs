@@ -11,8 +11,8 @@ namespace WebApplication1.DatabaseContext
             : base(configuration)
         {
         }
-        // EN: DbSet properties represent database tables and allow querying and saving data.
-        // BG: DbSet свойствата представляват таблиците в базата данни и позволяват заявки и запис на данни.
+        // DbSet properties represent database tables and allow querying and saving data.
+        // DbSet свойствата представляват таблиците в базата данни и позволяват заявки и запис на данни.
         public DbSet<GardenPlot> GardenPlots { get; set; } = null!;
         public DbSet<GardenMember> GardenMembers { get; set; } = null!;
         public DbSet<HarvestRecord> HarvestRecords { get; set; } = null!;
@@ -20,8 +20,8 @@ namespace WebApplication1.DatabaseContext
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            // EN: Defines primary key and unique index to ensure each plot has a unique identifier and designation.
-            // BG: Дефинира първичен ключ и уникален индекс, за да гарантира уникален идентификатор и обозначение на всеки парцел.
+            // Defines primary key and unique index to ensure each plot has a unique identifier and designation.
+            // Дефинира първичен ключ и уникален индекс, за да гарантира уникален идентификатор и обозначение на всеки парцел.
             builder.Entity<GardenPlot>(plot =>
             {
                 plot.HasKey(p => p.PlotIdentifier);
