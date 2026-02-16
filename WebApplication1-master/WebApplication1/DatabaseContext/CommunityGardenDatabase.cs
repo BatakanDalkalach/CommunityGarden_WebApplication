@@ -33,7 +33,8 @@ namespace WebApplication1.DatabaseContext
                     .HasForeignKey(p => p.AssignedGardenerId)
                     .OnDelete(DeleteBehavior.SetNull);
             });
-
+            // Ensures each member has a unique email and limits email length.
+            // Гарантира, че всеки член има уникален имейл и ограничава дължината му.
             builder.Entity<GardenMember>(member =>
             {
                 member.HasKey(m => m.MemberId);
